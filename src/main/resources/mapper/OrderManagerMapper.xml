@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.roaddamage1.mapper.OrderManagerMapper">
+
+
+    <insert id="PatchOrderMessageStatus" parameterType="com.example.roaddamage1.mapper.OrderManagerMapper">
+        insert into yolo(jingweidu,location,user_id) values (#{jingweidu},#{location},#{userId})
+    </insert>
+
+
+
+    <resultMap id="picAllInform" type="com.example.roaddamage1.VO.OrderManagerVO">
+        <id column="id" property="id" />
+        <result column="location" property="location" />
+        <result column="jingweidu" property="jingweidu" />
+        <result column="pic_url" property="picUrl" />
+    </resultMap>
+<!--    分页-->
+    <select id="getBatchInforamtion" resultMap="picAllInform">
+        select t1.jingweidu,t1.location,t1.id,t1.user_id,t2.pic_url
+
+        from yolo t1 left join urlObject t2 on t1.user_id  = t2.user_id
+        <where>
+            <if test="info != null and info != ''">
+                and t1.location like concat('%', #{info}, '%')
+            </if>
+            <if test="user_id != null and user_id != ''">
+                and t1.user_id =  #{user_id}
+            </if>
+
+        </where>
+
+    </select>
+<!--    不分页-->
+    <select id="getBatchInforamtionArrayList" resultType="com.example.roaddamage1.DTO.OrderManagerDTO">
+        select * from yolo
+        <where>
+            <if test="info != null and info != ''">
+               and location like concat('%', #{info}, '%')
+            </if>
+
+        </where>
+    </select>
+
+
+</mapper>
